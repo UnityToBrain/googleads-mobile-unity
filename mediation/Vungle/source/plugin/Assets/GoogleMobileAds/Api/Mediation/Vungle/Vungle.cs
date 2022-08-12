@@ -21,19 +21,14 @@ namespace GoogleMobileAds.Api.Mediation.Vungle
 {
     public enum VungleConsent
     {
-        UNKNOWN = 0,
-        ACCEPTED,
-        DENIED
+        UNKNOWN = -1,
+        ACCEPTED = 0,
+        DENIED = 1
     }
 
     public class Vungle
     {
-        public static readonly IVungleClient client = GetVungleClient();
-
-        public static void UpdateConsentStatus(VungleConsent consentStatus)
-        {
-            client.UpdateConsentStatus(consentStatus);
-        }
+        public static readonly IVungleClient client = VungleClientFactory.CreateVungleClient();
 
         public static void UpdateConsentStatus(VungleConsent consentStatus,
                                                String consentMessageVersion)
@@ -51,9 +46,14 @@ namespace GoogleMobileAds.Api.Mediation.Vungle
             return client.GetCurrentConsentMessageVersion();
         }
 
-        private static IVungleClient GetVungleClient()
+        public static void UpdateCCPAStatus(VungleConsent consentStatus)
         {
-            return VungleClientFactory.VungleInstance();
+            client.UpdateCCPAStatus(consentStatus);
+        }
+
+        public static VungleConsent GetCCPAStatus()
+        {
+            return client.GetCCPAStatus();
         }
     }
 }

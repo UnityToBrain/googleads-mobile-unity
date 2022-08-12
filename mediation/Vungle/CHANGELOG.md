@@ -1,5 +1,10 @@
 ## Vungle Unity Mediation Plugin Changelog
 
+#### Next Version
+- Added the following methods to the `Vungle` class to support CCPA:
+  * `UpdateCCPAStatus(VungleConsent)`
+  * `GetCCPAStatus()`
+
 #### [Version 3.8.2](https://dl.google.com/googleadmobadssdk/mediation/unity/vungle/VungleUnityAdapter-3.8.2.zip)
 - Supports [Vungle Android adapter version 6.11.0.2](https://github.com/googleads/googleads-mobile-android-mediation/blob/main/ThirdPartyAdapters/vungle/CHANGELOG.md#version-61102).
 - Supports [Vungle iOS adapter version 6.11.0.1](https://github.com/googleads/googleads-mobile-ios-mediation/blob/main/adapters/Vungle/CHANGELOG.md#version-61101).

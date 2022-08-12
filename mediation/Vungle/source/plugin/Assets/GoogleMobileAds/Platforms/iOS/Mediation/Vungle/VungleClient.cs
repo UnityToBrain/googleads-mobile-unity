@@ -16,7 +16,7 @@
 
 using System;
 using UnityEngine;
-
+using System.Runtime.InteropServices;
 using GoogleMobileAds.Api.Mediation.Vungle;
 using GoogleMobileAds.Common.Mediation.Vungle;
 
@@ -35,31 +35,52 @@ namespace GoogleMobileAds.iOS.Mediation.Vungle
             }
         }
 
-        public void UpdateConsentStatus(VungleConsent consentStatus)
-        {
-            if (consentStatus == VungleConsent.UNKNOWN) {
-                MonoBehaviour.print ("Cannot call '[VungleRouterConsent updateConsentStatus:]' with unknown consent status.");
-                return;
-            }
-
-            Externs.GADUMUpdateConsentStatus( (int)consentStatus );
-        }
-
         public void UpdateConsentStatus(VungleConsent consentStatus,
                                         String consentMessageVersion)
         {
-            UpdateConsentStatus(consentStatus);
+            if (consentStatus == VungleConsent.UNKNOWN)
+            {
+                MonoBehaviour.print("[Vungle Plugin] Cannot call 'UpdateConsentStatus()' " +
+                        "with unknown consent status.");
+                return;
+            }
+
+            Externs.GADUMVungleUpdateConsentStatus((int)consentStatus, consentMessageVersion);
         }
 
         public VungleConsent GetCurrentConsentStatus()
         {
-            return (VungleConsent)Externs.GADUMGetCurrentConsentStatus();
+            return (VungleConsent)Externs.GADUMVungleGetCurrentConsentStatus();
         }
 
-        [System.Obsolete("Consent Message is obsolete as of version 6.3.2.0 of the Vungle iOS adapter.")]
-        public String GetCurrentConsentMessageVersion()
+        public string GetCurrentConsentMessageVersion()
         {
-            return "";
+            return IOSStringToUnityString(Externs.GADUMVungleGetCurrentConsentMessageVersion());
+        }
+
+        public void UpdateCCPAStatus(VungleConsent consentStatus)
+        {
+            if (consentStatus == VungleConsent.UNKNOWN)
+            {
+                MonoBehaviour.print("[Vungle Plugin] Cannot call 'UpdateCCPAStatus()' " +
+                        "with unknown consent status.");
+                return;
+            }
+
+            Externs.GADUMVungleUpdateCCPAStatus((int)consentStatus);
+        }
+
+        public VungleConsent GetCCPAStatus()
+        {
+            return (VungleConsent)Externs.GADUMVungleGetCCPAStatus();
+        }
+
+        // Utility Method to properly pass NSStrings to Unity Strings.
+        private string IOSStringToUnityString(IntPtr iOSString)
+        {
+            string unityString = Marshal.PtrToStringAnsi(iOSString);
+            Marshal.FreeHGlobal(iOSString);
+            return unityString;
         }
     }
 }

@@ -20,10 +20,12 @@ namespace GoogleMobileAds.Common.Mediation.Vungle
 {
     public interface IVungleClient
     {
-        void UpdateConsentStatus(VungleConsent consentStatus);
         void UpdateConsentStatus(VungleConsent consentStatus,
                                  String consentMessageVersion);
         VungleConsent GetCurrentConsentStatus();
         String GetCurrentConsentMessageVersion();
+
+        void UpdateCCPAStatus(VungleConsent consentStatus);
+        VungleConsent GetCCPAStatus();
     }
 }
