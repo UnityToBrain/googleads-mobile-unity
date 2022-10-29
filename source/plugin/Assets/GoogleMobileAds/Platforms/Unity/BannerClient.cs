@@ -23,7 +23,7 @@ using UnityEngine.UI;
 
 namespace GoogleMobileAds.Unity
 {
-    public class BannerClient : BaseAdDummyClient, IBannerClient
+    public class BannerClient : BaseAdClient, IBannerClient
     {
         // Ad event fired when the banner ad has been received.
         public event EventHandler<EventArgs> OnAdLoaded;
@@ -38,12 +38,12 @@ namespace GoogleMobileAds.Unity
 
         private Dictionary<AdSize, string> prefabAds = new Dictionary<AdSize, string>()
         {
-            {AdSize.Banner, "DummyAds/Banners/BANNER"},
-            {AdSize.SmartBanner, "DummyAds/Banners/SMART_BANNER" },
-            {AdSize.MediumRectangle, "DummyAds/Banners/MEDIUM_RECTANGLE" },
-            {AdSize.IABBanner, "DummyAds/Banners/FULL_BANNER" },
-            {AdSize.Leaderboard, "DummyAds/Banners/LEADERBOARD" },
-            {new AdSize (320,100), "DummyAds/Banners/LARGE_BANNER" }
+            {AdSize.Banner, "PlaceholderAds/Banners/BANNER"},
+            {AdSize.SmartBanner, "PlaceholderAds/Banners/SMART_BANNER" },
+            {AdSize.MediumRectangle, "PlaceholderAds/Banners/MEDIUM_RECTANGLE" },
+            {AdSize.IABBanner, "PlaceholderAds/Banners/FULL_BANNER" },
+            {AdSize.Leaderboard, "PlaceholderAds/Banners/LEADERBOARD" },
+            {new AdSize (320,100), "PlaceholderAds/Banners/LARGE_BANNER" }
         };
 
         private ButtonBehaviour buttonBehaviour;
@@ -68,7 +68,7 @@ namespace GoogleMobileAds.Unity
         {
             if (adSize.AdType == AdSize.Type.AnchoredAdaptive)
             {
-                LoadAndSetPrefabAd("DummyAds/Banners/ADAPTIVE");
+                LoadAndSetPrefabAd("PlaceholderAds/Banners/ADAPTIVE");
             }
             else
             {
@@ -91,7 +91,7 @@ namespace GoogleMobileAds.Unity
         {
             if (adSize.AdType == AdSize.Type.AnchoredAdaptive)
             {
-                LoadAndSetPrefabAd("DummyAds/Banners/ADAPTIVE");
+                LoadAndSetPrefabAd("PlaceholderAds/Banners/ADAPTIVE");
             }
             else
             {
@@ -215,16 +215,16 @@ namespace GoogleMobileAds.Unity
                     rect.anchoredPosition = new Vector2(0, -(float)rect.sizeDelta.y/2);
                 } else if (pos == AdPosition.Center)
                 {
-                    LoadAndSetPrefabAd("DummyAds/Banners/CENTER");
+                    LoadAndSetPrefabAd("PlaceholderAds/Banners/CENTER");
                     if (adSize.AdType == AdSize.Type.AnchoredAdaptive)
                     {
-                        LoadAndSetPrefabAd("DummyAds/Banners/CENTER");
+                        LoadAndSetPrefabAd("PlaceholderAds/Banners/CENTER");
                         Text adText = prefabAd.GetComponentInChildren<Image>().GetComponentInChildren<Text>();
                         adText.text = "This is a Test Adaptive Banner";
                     }
                     else if (adSize == AdSize.SmartBanner)
                     {
-                        LoadAndSetPrefabAd("DummyAds/Banners/CENTER");
+                        LoadAndSetPrefabAd("PlaceholderAds/Banners/CENTER");
                         Text adText = prefabAd.GetComponentInChildren<Image>().GetComponentInChildren<Text>();
                         adText.text = "This is a Test Smart Banner";
                     }
@@ -237,7 +237,7 @@ namespace GoogleMobileAds.Unity
                     rect.anchoredPosition = rect.position;
                 }
             } else {
-                Debug.Log("Invalid Dummy Ad");
+                Debug.Log("Invalid Placeholder Ad");
             }
         }
 
@@ -296,7 +296,7 @@ namespace GoogleMobileAds.Unity
                         break;
                 }
             } else {
-                Debug.Log("Invalid Dummy Ad");
+                Debug.Log("Invalid Placeholder Ad");
             }
         }
 
