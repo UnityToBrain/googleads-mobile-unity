@@ -47,6 +47,8 @@ namespace GoogleMobileAds.Android
 
         public event EventHandler<EventArgs> OnAdDidRecordImpression;
 
+        public event Action OnAdClicked;
+
         public void CreateRewardedInterstitialAd()
         {
             // Do nothing.
@@ -147,6 +149,14 @@ namespace GoogleMobileAds.Android
             if (this.OnAdDidRecordImpression != null)
             {
                 this.OnAdDidRecordImpression(this, EventArgs.Empty);
+            }
+        }
+
+        internal void onAdClicked()
+        {
+            if (this.OnAdClicked != null)
+            {
+                this.OnAdClicked();
             }
         }
 

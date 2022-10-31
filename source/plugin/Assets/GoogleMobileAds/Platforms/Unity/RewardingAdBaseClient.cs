@@ -42,6 +42,8 @@ namespace GoogleMobileAds.Unity
         public event EventHandler<EventArgs> OnAdDidDismissFullScreenContent;
         // Ad event fired when an ad impression has been recorded.
         public event EventHandler<EventArgs> OnAdDidRecordImpression;
+        // Ad event fired when an ad impression has been recorded.
+        public event Action OnAdClicked;
 
         internal static readonly Dictionary<AdSize, string> prefabAds = new Dictionary<AdSize, string>()
         {
@@ -59,6 +61,10 @@ namespace GoogleMobileAds.Unity
             button.onClick.AddListener(() =>
             {
                 buttonBehaviour.OpenURL();
+                if (OnAdClicked != null)
+                {
+                    OnAdClicked();
+                }
             });
             Button[] innerButtons = adImage.GetComponentsInChildren<Button>();
 
@@ -108,6 +114,10 @@ namespace GoogleMobileAds.Unity
                 if (OnAdLoaded != null)
                 {
                     OnAdLoaded.Invoke(this, EventArgs.Empty);
+                    if (OnAdDidRecordImpression != null)
+                    {
+                        OnAdDidRecordImpression(this, EventArgs.Empty);
+                    }
                 }
             }
             else
