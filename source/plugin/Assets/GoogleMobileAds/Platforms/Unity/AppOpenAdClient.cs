@@ -39,6 +39,8 @@ namespace GoogleMobileAds.Unity
 
         public event EventHandler<EventArgs> OnAdDidRecordImpression;
 
+        public event Action OnAdClicked;
+
         private Dictionary<AdSize, string> prefabAds = new Dictionary<AdSize, string>() {
             { new AdSize(768, 1024), "DummyAds/AppOpen/768x1024" },
             { new AdSize(1024, 768), "DummyAds/AppOpen/1024x768" }
@@ -52,6 +54,10 @@ namespace GoogleMobileAds.Unity
             Image adImage = images[1];
             Button button = adImage.GetComponentInChildren<Button>();
             button.onClick.AddListener(() => {
+                if (OnAdClicked != null)
+                {
+                    OnAdClicked();
+                }
                 buttonBehaviour.OpenURL();
             });
 
@@ -94,6 +100,10 @@ namespace GoogleMobileAds.Unity
                 if(OnAdLoaded != null)
                 {
                     OnAdLoaded.Invoke(this, EventArgs.Empty);
+                    if (OnAdDidRecordImpression != null)
+                    {
+                        OnAdDidRecordImpression(this, EventArgs.Empty);
+                    }
                 }
             }
             else

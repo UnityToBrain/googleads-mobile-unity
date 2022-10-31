@@ -43,6 +43,9 @@ namespace GoogleMobileAds.Common
     // Ad event fired when an impression has been recorded for the ad.
     event EventHandler<EventArgs> OnAdDidRecordImpression;
 
+    // Ad event fired when an ad click has been recorded.
+    event Action OnAdClicked;
+
     // Creates an app open ad.
     void CreateAppOpenAd();
 
