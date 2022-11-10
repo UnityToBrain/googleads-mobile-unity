@@ -14,12 +14,19 @@
 
 namespace GoogleMobileAds.Api
 {
+    /// <summary>
+    /// Allows apps that have opted into the
+    /// <seealso href="http://developer.android.com/distribute/googleplay/families/about.html">
+    /// Designed for Families </seealso> program to specify whether a given ad request should
+    /// return Designed for Families-compliant ads. Please note that the method is ONLY intended
+    /// for apps that have opted into Designed for Families.Please see the
+    /// <seealso href="https://support.google.com/admob/answer/6223431?hl=en"> Google AdMob help
+    /// center article</seealso> for more information about this setting.
+    /// </summary>
     public enum TagForChildDirectedTreatment
     {
         Unspecified = -1,
         False = 0,
         True = 1,
-
     }
-
 }
