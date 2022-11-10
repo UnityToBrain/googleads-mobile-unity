@@ -16,23 +16,48 @@ using System.Collections.Generic;
 
 namespace GoogleMobileAds.Api
 {
+    /// <summary>
+    /// Global configuration that will be used for every <see cref="AdRequest"/>
+    /// </summary>
     public class RequestConfiguration
     {
+        /// <summary>
+        /// Sets a maximum ad content rating. AdMob ads returned for these requests have
+        /// a content rating at or below the level set.
+        /// </summary>
         public MaxAdContentRating MaxAdContentRating { get; private set; }
 
+        /// <summary>
+        /// Allows apps that have opted into the Designed for Families program to specify whether
+        /// a given ad request should return Designed for Families-compliant ads.
+        /// </summary>
         public TagForChildDirectedTreatment? TagForChildDirectedTreatment { get; private set; }
+
+        /// <summary>
+        /// Indicates the publisher specified that the ad request should receive treatment for
+        /// users in the European Economic Area(EEA) under the age of consent.
+        /// </summary>
         public TagForUnderAgeOfConsent? TagForUnderAgeOfConsent { get; private set; }
+
+        /// <summary>
+        /// The test device IDs corresponding to test device which will always request
+        /// test ads. Returns an empty list if test device IDs were not previously set.
+        /// </summary>
         public List<string> TestDeviceIds { get; private set; }
 
+        /// <summary>
+        /// Controls whether the Google Mobile Ads SDK Same App Key is enabled.
+        /// The value set persists across app sessions. The key is enabled by default.
+        /// </summary>
         public bool? SameAppKeyEnabled { get; private set; }
 
         private RequestConfiguration(Builder builder)
         {
-            this.MaxAdContentRating = builder.MaxAdContentRating;
-            this.TagForChildDirectedTreatment = builder.TagForChildDirectedTreatment;
-            this.TagForUnderAgeOfConsent = builder.TagForUnderAgeOfConsent;
-            this.TestDeviceIds = builder.TestDeviceIds;
-            this.SameAppKeyEnabled = builder.SameAppKeyEnabled;
+            MaxAdContentRating = builder.MaxAdContentRating;
+            TagForChildDirectedTreatment = builder.TagForChildDirectedTreatment;
+            TagForUnderAgeOfConsent = builder.TagForUnderAgeOfConsent;
+            TestDeviceIds = builder.TestDeviceIds;
+            SameAppKeyEnabled = builder.SameAppKeyEnabled;
         }
 
         public Builder ToBuilder()
@@ -59,40 +84,61 @@ namespace GoogleMobileAds.Api
 
             public Builder()
             {
-                this.MaxAdContentRating = null;
-                this.TagForChildDirectedTreatment = null;
-                this.TagForUnderAgeOfConsent = null;
-                this.TestDeviceIds = new List<string>();
-                this.SameAppKeyEnabled = null;
+                MaxAdContentRating = null;
+                TagForChildDirectedTreatment = null;
+                TagForUnderAgeOfConsent = null;
+                TestDeviceIds = new List<string>();
+                SameAppKeyEnabled = null;
             }
 
+            /// <summary>
+            /// The maximum ad content rating. All Google ads will have this content rating or lower.
+            /// </summary>
             public Builder SetMaxAdContentRating(MaxAdContentRating maxAdContentRating)
             {
                 this.MaxAdContentRating = maxAdContentRating;
                 return this;
             }
 
-            public Builder SetTagForChildDirectedTreatment(TagForChildDirectedTreatment? tagForChildDirectedTreatment)
+            /// <summary>
+            /// Allows apps that have opted into the Designed for Families program to specify whether
+            /// a given ad request should return Designed for Families-compliant ads.
+            /// </summary>
+            public Builder SetTagForChildDirectedTreatment(
+                TagForChildDirectedTreatment? tagForChildDirectedTreatment)
             {
-                this.TagForChildDirectedTreatment = tagForChildDirectedTreatment;
-                return this;
-            }
-            public Builder SetTagForUnderAgeOfConsent(TagForUnderAgeOfConsent? tagForUnderAgeOfConsent)
-            {
-                this.TagForUnderAgeOfConsent = tagForUnderAgeOfConsent;
+                TagForChildDirectedTreatment = tagForChildDirectedTreatment;
                 return this;
             }
 
+            /// <summary>
+            /// Indicates the publisher specified that the ad request should receive treatment for
+            /// users in the European Economic Area(EEA) under the age of consent.
+            /// </summary>
+            public Builder SetTagForUnderAgeOfConsent(
+                TagForUnderAgeOfConsent? tagForUnderAgeOfConsent)
+            {
+                TagForUnderAgeOfConsent = tagForUnderAgeOfConsent;
+                return this;
+            }
+
+            /// <summary>
+            /// The test device IDs corresponding to test device which will always request
+            /// test ads. Returns an empty list if test device IDs were not previously set.
+            /// </summary>
             public Builder SetTestDeviceIds(List<string> testDeviceIds)
             {
-                this.TestDeviceIds = testDeviceIds;
+                TestDeviceIds = testDeviceIds;
                 return this;
             }
 
-            // Controls whether the Google Mobile Ads SDK Same App Key is enabled.
-            // The value set persists across app sessions. The key is enabled by default. Applies to iOS only.
-            public Builder SetSameAppKeyEnabled(bool enabled) {
-              this.SameAppKeyEnabled = enabled;
+            /// <summary>
+            /// Controls whether the Google Mobile Ads SDK Same App Key is enabled.
+            /// The value set persists across app sessions. The key is enabled by default.
+            /// </summary>
+            public Builder SetSameAppKeyEnabled(bool enabled)
+            {
+              SameAppKeyEnabled = enabled;
               return this;
             }
 
