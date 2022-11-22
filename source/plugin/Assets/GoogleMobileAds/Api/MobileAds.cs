@@ -15,6 +15,7 @@
 using System;
 using UnityEngine;
 using GoogleMobileAds.Common;
+using System.Threading;
 
 namespace GoogleMobileAds.Api
 {
@@ -46,6 +47,10 @@ namespace GoogleMobileAds.Api
             }
         }
 
+        private static SynchronizationContext _synchronizationContext =
+            SynchronizationContext.Current;
+        private static int _unityMainThreadId = Thread.CurrentThread.ManagedThreadId;
+
         private readonly IMobileAdsClient client = GetMobileAdsClient();
 
         private static IClientFactory clientFactory;
@@ -68,6 +73,12 @@ namespace GoogleMobileAds.Api
         }
 
         /// <summary>
+        /// When true all events raised by GoogleMobileAds will be invoked
+        /// on the Unity main thread. The default value is false.
+        /// </summary>
+        public static bool RaiseAdEventsOnUnityMainThread = false;
+
+        /// <summary>
         /// Initializes the Google Mobile Ads SDK.
         /// </summary>
         /// <remarks>
@@ -82,11 +93,13 @@ namespace GoogleMobileAds.Api
         {
             Instance.client.Initialize((initStatusClient) =>
             {
-
-                if (initCompleteAction != null)
+                RaiseAdEvent(() =>
                 {
-                    initCompleteAction.Invoke(new InitializationStatus(initStatusClient));
-                }
+                    if (initCompleteAction != null)
+                    {
+                        initCompleteAction.Invoke(new InitializationStatus(initStatusClient));
+                    }
+                });
             });
             MobileAdsEventExecutor.Initialize();
         }
@@ -185,15 +198,18 @@ namespace GoogleMobileAds.Api
         {
             Instance.client.OpenAdInspector(args =>
             {
-                if(adInspectorClosedAction != null)
+                RaiseAdEvent(() =>
                 {
-                    AdInspectorError error = null;
-                    if (args != null && args.AdErrorClient != null)
+                    if(adInspectorClosedAction != null)
                     {
-                        error = new AdInspectorError(args.AdErrorClient);
+                        AdInspectorError error = null;
+                        if (args != null && args.AdErrorClient != null)
+                        {
+                            error = new AdInspectorError(args.AdErrorClient);
+                        }
+                        adInspectorClosedAction(error);
                     }
-                    adInspectorClosedAction(error);
-                }
+                });
             });
         }
 
@@ -222,6 +238,32 @@ namespace GoogleMobileAds.Api
         internal static void SetClientFactory(IClientFactory clientFactory)
         {
             MobileAds.clientFactory = clientFactory;
+        }
+
+        /// <summary>
+        /// Raises the action on the Unity Main Thread if RaiseAdEventsOnUnityMainThread is true.
+        /// </summary>
+        /// <param name="action">
+        /// The action to try to raise on the Unity Main Thread.
+        /// </param>
+        internal static void RaiseAdEvent(Action action)
+        {
+            if (action == null)
+            {
+                return;
+            }
+
+            if (!RaiseAdEventsOnUnityMainThread ||
+                Thread.CurrentThread.ManagedThreadId == _unityMainThreadId)
+            {
+                action();
+                return;
+            }
+
+            _synchronizationContext.Post((state) =>
+            {
+                action();
+            }, action);
         }
 
         private static IMobileAdsClient GetMobileAdsClient()
